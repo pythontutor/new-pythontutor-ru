@@ -1,0 +1,178 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+        <link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/css/roboto.min.css" rel="stylesheet">
+        <link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/css/material-fullpalette.min.css" rel="stylesheet">
+        <link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/css/ripples.min.css" rel="stylesheet">
+        <link href="{% static 'css/snackbar.min.css' %}" rel="stylesheet">
+        <link href="{% static 'css/visualizer.css' %}" rel="stylesheet">
+        <!--<link href="http://pythontutor.ru/static/css/visualizer.css" rel="stylesheet">-->
+        <link href="http://pythontutor.ru/static/css/lesson.css" rel="stylesheet">
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+        <script src="{% static 'js/snackbar.min.js' %}"></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/js/ripples.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/js/material.min.js"></script>
+
+        <script>
+            $(function() {
+                $.material.init();
+
+                function csrfSafeMethod(method) {
+                    // these HTTP methods do not require CSRF protection
+                    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+                }
+                $.ajaxSetup({
+                    beforeSend: function(xhr, settings) {
+                        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                            xhr.setRequestHeader("X-CSRFToken", $.cookie('csrftoken'));
+                        }
+                    }
+                });
+            });
+        </script>
+
+        <style>
+            body {
+                padding-top: 60px;  /* sticky navbar */
+            }
+        </style>
+
+        <style>
+            /* columns of same height styles */
+
+            .row-full-height {
+            height: 100%;
+            }
+            .col-full-height {
+            height: 100%;
+            vertical-align: middle;
+            }
+            .row-same-height {
+            display: table;
+            width: 100%;
+            /* fix overflow */
+            table-layout: fixed;
+            }
+            .col-xs-height {
+            display: table-cell;
+            float: none !important;
+            }
+
+            @media (min-width: 768px) {
+            .col-sm-height {
+            display: table-cell;
+            float: none !important;
+            }
+            }
+            @media (min-width: 992px) {
+            .col-md-height {
+            display: table-cell;
+            float: none !important;
+            }
+            }
+            @media (min-width: 1200px) {
+            .col-lg-height {
+            display: table-cell;
+            float: none !important;
+            }
+            }
+
+            /* vertical alignment styles */
+
+            .col-top {
+            vertical-align: top;
+            }
+            .col-middle {
+            vertical-align: middle;
+            }
+            .col-bottom {
+            vertical-align: bottom;
+            }
+        </style>
+
+        <style>
+            /* sticky footer http://getbootstrap.com/examples/sticky-footer */
+
+            html {
+              position: relative;
+              min-height: 100%;
+            }
+
+            body {
+              /* Margin bottom by footer height */
+              margin-bottom: 160px;
+            }
+
+            footer {
+              position: absolute;
+              bottom: 0;
+              width: 100%;
+              /* Set the fixed height of the footer here */
+              height: 140px;
+              background-color: #eee;
+              padding-top: 10px;
+              padding-bottom: 10px;
+              color: #aaa;
+              z-index: 2;
+            }
+        </style>
+
+        {% block extrahead %}
+        {% endblock %}
+    </head>
+
+    <body>
+        <div>
+            <div class="navbar navbar-default navbar-fixed-top navbar-material-light-blue-500">
+                <div class="navbar-header">
+                    <!-- mobile
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    -->
+                    <a class="navbar-brand" href="javascript:void(0)"><img src="{% static 'logo.png' %}" style="height: 100%"/></a>
+                </div>
+                <div class="navbar-collapse collapse navbar-responsive-collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="javascript:void(0)">Главная</a></li>
+                        <li><a href="javascript:void(0)">Все курсы</a></li>
+                        <li><a href="javascript:void(0)">Статистика</a></li>
+                        <li><a href="javascript:void(0)">Отзывы</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right" style="margin-right: 15px;">
+                        <li><p class="navbar-btn" style="margin: 0px;">
+                            {% if request.user %}
+                                <a class="btn btn-raised btn-ripple btn-material-light-blue-500" href="javascript:void(0)">
+                                    Выход
+                                </a>
+                            {% else %}
+                                <a class="btn btn-raised btn-material-green-500" href="javascript:void(0)">
+                                    Вход
+                                </a>
+                            {% endif %}
+                        </p></li>
+                    </ul>
+                    <form class="navbar-form navbar-right">
+                        <div class="form-group has-info">
+                            <input type="text" class="form-control col-lg-8" placeholder="Поиск">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        {% block body %}
+        {% endblock %}
+    </body>
+</html>

@@ -1,0 +1,15 @@
+<div>
+    <a href="{% url 'lesson' lesson.course.slug lesson.slug %}" style="color: #551A8B">
+        <div class="list-group-item">
+            <div class="row-action-primary">
+                <i style="font-style: normal;">{{ lesson.order }}</i>
+            </div>
+            <div class="row-content">
+                <div class="least-content"></div>
+                <h4 class="list-group-item-heading">{{ lesson.name }}</h4>
+                <p class="list-group-item-text">{{ lesson.description }}</p>
+            </div>
+        </div>
+    </a>
+    <div class="list-group-separator"></div>
+</div>

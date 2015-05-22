@@ -1,0 +1,443 @@
+/*
+
+Online Python Tutor
+https://github.com/pgbovine/OnlinePythonTutor/
+
+Copyright (C) 2010-2012 Philip J. Guo (philip@pgbovine.net)
+
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be included
+in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+*/
+
+/*
+ * Refactoring and modernization by the Pythontutor-ru team
+ * https://github.com/vpavlenko/pythontutor-ru, 2014
+ */
+
+
+.visualizer_lineGutter_current,
+.visualizer_lineMarker_current {
+	background: rgba(0, 0, 128, 0.17);
+}
+.visualizer_lineGutter_error,
+.visualizer_lineMarker_error {
+	background: rgba(128, 0, 0, 0.17);
+}
+
+.visualizer_lineMarker_current,
+.visualizer_lineMarker_error {
+	position: absolute;
+}
+
+.visualizer_lineGutter_visited {
+	color: #4949AE;
+}
+
+
+.visualizer_code {
+	margin: 0;
+	margin-bottom: 10px;
+}
+
+
+.ace_editor {
+	border: solid 1px #929DB9;
+}
+
+.visualizer_prog_code {
+	height: 220px;
+	border-radius: 0;
+	margin-bottom: 0;
+}
+
+.visualizer_prog_stdin,
+.visualizer_prog_stdout {
+	height: 95px;
+}
+
+
+.visualizer_error {
+}
+
+.visualizer_error_translation {
+	font-size: 80%;
+	color: #866;
+	border-top: solid 1px #866;
+	margin-top: 5px;
+	padding-top: 5px;
+	padding-bottom: 1px;
+}
+
+
+.visualizer_code_toppanel,
+.visualizer_code_bottompanel {
+	background: #F0F0F0;
+	height: 27px;
+	border: solid 1px #929DB8;
+	padding: 1px 9px;
+	font-size: 13px;
+}
+.visualizer_code_toppanel { border-bottom: none; }
+.visualizer_code_bottompanel { border-top: none; }
+
+.visualizer_code_toppanel button,
+.visualizer_code_bottompanel button {
+	height: 24px;
+	border: none;
+	padding: 0 8px;
+	margin: 0;
+	line-height: 22px;
+}
+
+.visualizer_explain_mode {
+	margin: 0;
+	margin-right: 7px;
+	font-weight: normal;
+}
+
+.visualizer_explain_mode > input {
+	margin: 0;
+	position: relative;
+	top: 3px;
+}
+
+
+.visualizer_vcr {
+	text-align: center;
+}
+
+.visualizer_vcr button:disabled {
+	color: #999;
+}
+
+.visualizer_vcr button > .glyphicon {
+	line-height: 20px;
+}
+
+.visualizer_vcr_back { text-align: right; }
+.visualizer_vcr_back > .glyphicon { float: left; }
+
+.visualizer_vcr_next { text-align: left; }
+.visualizer_vcr_next > .glyphicon { float: right; }
+
+.visualizer_vcr_left { float: left; }
+.visualizer_vcr_right { float: right; }
+
+.visualizer_vcr_back,
+.visualizer_vcr_next {
+	min-width: 85px;
+}
+
+.visualizer_code_toppanel {
+	text-align: right;
+}
+
+.visualizer_status {
+	float: left;
+	line-height: 24px;
+	font-size: 14px;
+}
+
+.visualizer_run_btn > .glyphicon {
+	line-height: 20px;
+}
+
+
+.visualizer_dataviz {
+	position: relative;
+}
+
+.visualizer_dataviz_body {
+	margin-top: 10px;
+}
+
+.visualizer_dataviz_stackHeapTable > tbody > tr {
+	vertical-align: top;
+}
+
+
+/* Python data value rendering */
+
+.visualizer_dataviz_obj_null { color: #555555; }
+.visualizer_dataviz_obj_number { }
+.visualizer_dataviz_obj_bool { }
+
+.visualizer_dataviz_obj_string {
+	/* don't add a color since strings need to be rendered against various backgrounds */
+	font-family: Andale mono, monospace;
+}
+
+.visualizer_dataviz_key { }
+
+.visualizer_dataviz_obj_custom {
+	font-family: Andale mono, monospace;
+	font-size: 10pt;
+}
+
+
+.visualizer_dataviz_retval,
+.visualizer_dataviz_return_warning {
+	font-size: 9pt;
+}
+
+.visualizer_dataviz_return_warning {
+	padding-top: 10px;
+	color: #9d1e18;
+}
+
+
+.visualizer_dataviz_list {
+	border: 0px solid black;
+	background-color: #F5F798;
+	border-spacing: 0px;
+}
+
+.visualizer_dataviz_tuple {
+	background-color: #dddddd; /* must match .frameDataViz background-color */
+	border-spacing: 0px;
+	color: black;
+
+	border-bottom: 1px solid #555555; /* must match .visualizer_dataviz_tuple_header border */
+	border-top: 1px solid #555555; /* must match .visualizer_dataviz_tuple_header border */
+	border-right: 1px solid #555555; /* must match .visualizer_dataviz_tuple_header border */
+}
+
+.visualizer_dataviz_list .visualizer_dataviz_list_header,
+.visualizer_dataviz_tuple .visualizer_dataviz_tuple_header {
+	padding-left: 5px;
+	padding-top: 3px;
+	font-size: 8pt;
+	color: #666666;
+	text-align: left;
+	border-left: 1px solid #555555;
+}
+
+.visualizer_dataviz_list .visualizer_dataviz_list_element {
+	border-bottom: 1px solid #555555; /* must match .visualizer_dataviz_list_header border */
+	border-left: 1px solid #555555; /* must match .visualizer_dataviz_list_header border */
+}
+
+.visualizer_dataviz_tuple .visualizer_dataviz_tuple_element {
+	border-left: 1px solid #555555; /* must match .visualizer_dataviz_tuple_header border */
+}
+
+.visualizer_dataviz_list .visualizer_dataviz_list_element,
+.visualizer_dataviz_tuple .visualizer_dataviz_tuple_element {
+	padding-top: 0px;
+	padding-bottom: 8px;
+	padding-left: 10px;
+	padding-right: 10px;
+	vertical-align: bottom;
+}
+
+.visualizer_dataviz_set {
+	border: 1px solid black;
+	/*background-color: #F4F776;*/ /*slightly brighter than #F5F798 */
+	background-color: #F5F798;
+	border-spacing: 0px;
+	text-align: center;
+}
+
+.visualizer_dataviz_set .visualizer_dataviz_set_element {
+	padding: 8px;
+}
+
+
+.visualizer_dataviz_dict {
+	border-collapse: collapse;
+	border-spacing: 2px;
+}
+
+.visualizer_dataviz_dict .visualizer_dataviz_dict_entry {
+	border: 1px #111111 solid;
+}
+
+.visualizer_dataviz_dict .visualizer_dataviz_key {
+	background-color: #41507A;
+}
+
+.visualizer_dataviz_dict,
+.visualizer_dataviz_dict .visualizer_dataviz_value {
+	background-color: #899CD1;
+}
+
+
+.visualizer_dataviz_class {
+	background-color: #dddddd;
+	border-collapse: collapse;
+	border-spacing: 2px;
+}
+
+.visualizer_dataviz_class .visualizer_dataviz_class_entry {
+	border: 1px #777777 solid;
+}
+
+.visualizer_dataviz_class .visualizer_dataviz_class_key {
+	background-color: #222222;
+}
+
+.visualizer_dataviz_class .visualizer_dataviz_class_value {
+	background-color: #ffffff;
+}
+
+
+.visualizer_dataviz_instance {
+	border-collapse: collapse;
+	border-spacing: 2px;
+}
+
+.visualizer_dataviz_instance .visualizer_dataviz_instance_entry {
+	border: 1px #111111 solid;
+}
+
+.visualizer_dataviz_instance .visualizer_dataviz_instance_key {
+	background-color: #41507A;
+	color: #ffffff;
+}
+
+.visualizer_dataviz_instance,
+.visualizer_dataviz_instance .visualizer_dataviz_instance_value {
+	background-color: #FFFFDD; /* must match color of visualizer_dataviz_instance */
+}
+
+.visualizer_dataviz_dict .visualizer_dataviz_key,
+.visualizer_dataviz_class .visualizer_dataviz_class_key,
+.visualizer_dataviz_instance .visualizer_dataviz_instance_key {
+	color: #dddddd;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	padding-right: 8px;
+	text-align: right;
+	vertical-align: center;
+}
+
+.visualizer_dataviz_dict .visualizer_dataviz_value,
+.visualizer_dataviz_class .visualizer_dataviz_class_value,
+.visualizer_dataviz_instance .visualizer_dataviz_instance_value {
+	padding-top: 10px;
+	padding-bottom: 10px;
+	padding-right: 10px;
+	padding-left: 8px;
+	vertical-align: center;
+}
+
+
+
+
+.visualizer_dataviz_typename {
+	font-size: 8pt;
+	color: #222222;
+	margin-bottom: 1px;
+}
+
+.visualizer_dataviz_key .visualizer_dataviz_typename {
+	color: #eeeeee;
+}
+
+.visualizer_dataviz_circref {
+	font-size: 10pt;
+	color: #222222;
+}
+
+
+.visualizer_dataviz_stack {
+	float: left;
+	padding-right: 30px;
+	border-right: 1px dashed #bbbbbb;
+}
+
+.visualizer_dataviz_stack_frame {
+	background-color: #ffffff;
+	margin-bottom: 15px;
+	padding: 2px;
+	padding-left: 6px;
+	padding-right: 6px;
+	padding-bottom: 4px;
+	font-size: 11pt;
+	border-left: 1px solid #999999;
+}
+
+.visualizer_dataviz_stackHeapTable {
+	vertical-align:top;
+	font-size: 12pt;
+}
+
+/* apply to the currently selected stack frame (e.g., on mouse hover) */
+.visualizer_dataviz_stack_frame_selected {
+	background-color: #dddddd;
+}
+
+.visualizer_dataviz_top_stack_frame {
+	border-left: 1px solid #F15149;
+}
+
+.visualizer_dataviz_stack_frame_header {
+	font-family: Andale mono, monospace;
+	font-size: 10pt;
+	margin-top: 4px;
+	margin-bottom: 3px;
+}
+
+.visualizer_dataviz_stack_frame_header_inactive {
+	/* simulate a hyperlink */
+	text-decoration: underline;
+	color: #3D58A2;
+	cursor: pointer;
+}
+
+.visualizer_dataviz_stack_frame_var {
+	text-align: right;
+	min-width: 70px;
+	padding-right: 8px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.visualizer_dataviz_stack_frame_value {
+	text-align: left;
+	border-bottom: 1px solid #aaaaaa;
+	border-left: 1px solid #aaaaaa;
+
+	min-width: 40px;
+
+	padding-top: 3px;
+	padding-left: 3px;
+	padding-bottom: 3px;
+}
+
+.visualizer_dataviz_stack_frame_var_table {
+	text-align: right;
+	padding-top: 3px;
+
+	/* right-align the table */
+	margin-left: auto;
+	margin-right: 0px;
+}
+
+.visualizer_dataviz_heap {
+	float: left;
+	padding-left: 30px;
+}
+
+.visualizer_dataviz_heap_object {
+	margin-bottom: 15px;
+	padding-left: 7px; /* leave some room for connector endpoints */
+}

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <div class="container">
+        <!--<div class="col-sm-2 col-md-2 sidebar">-->
+            <!--<ul class="nav nav-sidebar">-->
+                <!--<li><a href='#'><span class='glyphicon glyphicon-phone'></span>Grupos</a></li>-->
+                <!--<li><a href='#'><span class='glyphicon glyphicon-phone'></span>Grupos</a></li>-->
+                <!--<li><a href='#'><span class='glyphicon glyphicon-phone'></span>Grupos</a></li>-->
+           <!--</ul>-->
+        <!--</div>-->
+
+        <div class="page-header" id="banner">
+            <div class="row row-full-height">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-height col-full-height">
+                    <h1>Интерактивный учебник языка Python</h1>
+                    <p class="lead">Запускайте программы <a href="#">прямо в своём браузере</a></p>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-height col-full-height">
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sm-4" style=" text-align: center;">
+                            <i class="mdi-social-group mdi-material-light-blue-500" style="font-size: 60px;"></i><br />
+                            100500 активных пользователей
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4" style=" text-align: center;">
+                            <i class="mdi-content-send mdi-material-light-blue-500" style="font-size: 60px;"></i><br />
+                            9000 посылок решений каждый день
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4" style=" text-align: center;">
+                            <i class="mdi-social-school mdi-material-light-blue-500" style="font-size: 60px;"></i><br />
+                            200 курсов от учителей ведущих школ
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% for i in 'x' %}
+        {% with course=title_course %}
+            {% include "includes/course-lessons-card.html" %}
+        {% endwith %}
+        {% endfor %}
+    </div>
+{% endblock %}

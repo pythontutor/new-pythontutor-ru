@@ -1,0 +1,27 @@
+{% load util %}
+
+<div class="page-block panel panel-default">
+    <div class="panel-heading">
+        <h2 class="panel-title">{{ course.name }}</h2>
+    </div>
+    <div class="panel-body">
+        <p class="lead">{{ course.description }}</p>
+        <div class="row">
+            <!--{% for lesson_chunk in course.lessons.all|chunks:"3" %}-->
+                <!--<div class="col-lg-4 col-md-4 col-sm-4">-->
+                    <!--<div class="list-group">-->
+                        <!--{% for lesson in lesson_chunk %}-->
+                            <!--{% include "includes/lesson-card.html" %}-->
+                        <!--{% endfor %}-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--{% endfor %}-->
+
+            <div class="list-group" style="-webkit-column-count: 3; -moz-column-count: 3; column-count: 3;">
+                {% for lesson in course.lessons.all %}
+                    {% include "includes/lesson-card.html" %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>

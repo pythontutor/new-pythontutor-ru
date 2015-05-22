@@ -1,0 +1,7 @@
+Django==1.8
+django-annoying==0.8.1
+gunicorn==19.3.0
+bootstrap-admin==0.3.5
+django-yamlfield==1.0.1
+markdown==2.6.1
+git+https://github.com/ryneeverett/python-markdown-comments.git@bd7a90fd8eed6fa49ca12b12b5b35580b0058dd3

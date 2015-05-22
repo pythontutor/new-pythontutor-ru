@@ -1,0 +1,111 @@
+{% extends 'base_with_sidebar.html' %}
+
+{% load markdown %}
+{% load staticfiles %}
+
+{% block extrahead %}
+    {{ block.super }}
+
+    <script src="{% static 'js/ace-editor/ace.js' %}"></script>
+    <script src="{% static 'js/jquery.jsPlumb-1.6.4-min.js' %}"></script>
+    <script src="{% static 'js/visualizer.js' %}"></script>
+    <script src="{% static 'js/visualizer-page.js' %}"></script>
+    <script src="{% static 'js/lesson.js' %}"></script>
+
+    <style>
+        :not(pre) > code {
+            white-space: nowrap;
+        }
+
+        #content table {
+            border: 1px;
+        }
+
+        .nav-sidebar-problems {
+            padding-left: 40px !important;
+        }
+
+        .run_me, .debug_me {
+            margin-top: 5px;
+        }
+
+        .test-button {
+            text-align: center;
+        }
+
+        .tests_passed_badge {
+            display: none;
+        }
+    </style>
+{% endblock %}
+
+{% block sidebar %}
+    <ul class="nav nav-sidebar">
+        {% for other_lesson in problem.lesson.course.lessons.all %}
+            <li>
+                <a href="{% url 'lesson' problem.lesson.course.slug other_lesson.slug %}">{{ other_lesson.order }}. {{ other_lesson.name }}</a>
+                {% if problem.lesson == other_lesson and problem.lesson.problems.all %}
+                    <a href="#problems" class="nav-sidebar-problems">Задачи</a>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+
+{% block content %}
+    <h1>{{ problem.name }}</h1>
+    <p>{{ problem.description|markdownify|safe }}</p>
+
+    <div id="visualizer"></div>
+
+    <a class="btn btn-info btn-raised run_tests">Запустить все тесты <span class="badge tests_passed_badge">тестов пройдено: <span class="tests_passed">0</span>/{{ problem.test_data|length }}</span></a>
+    <!-- TODO чекбокс "остановиться после первого упавшего теста" -->
+    <a class="btn btn-info btn-raised submit_solution">Отправить решение</a>
+
+    <div class="btn-group">
+        <div class="btn-group">
+            <a href="bootstrap-elements.html" data-target="#" class="btn btn-default dropdown-toggle {% if not submissions %}disabled{% else %}btn-info{% endif %} submission_history_button" data-toggle="dropdown">
+                Отправленные решения <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu submission_history">
+                {% for submission in submissions %}
+                    <li><a href="javascript:void(0)" data-submission-id="{{ submission.id }}">{{ submission.date_string }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <h2>Тестовые данные</h2>
+    <div class="alert alert-dismissable alert-info">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <strong>Авторские тесты</strong>
+        <p>Это - набор тестов - входных данных и проверочных к ним выходных данных.</p>
+        <p>
+            Каждый тест можно:
+            <ul>
+                <li><b>отладить</b> - перенести в окно редактора и запустить в пошаговом режиме</li>
+                <li><b>запустить</b> - выполнить и проверить результат в автоматическом режиме</li>
+            </ul>
+        </p>
+        <p>
+            После запуска строка с тестом будет окрашена в зависимости от результата.
+        </p>
+    </div>
+    <table class="table">
+        <tr>
+            <th class="col-md-5">Вход</th>
+            <th class="col-md-5">Ожидаемый выход</th>
+            <th class="col-md-1" data-toggle="tooltip" data-placement="top" title data-original-title="Запустить код в окне редактора">Отладить</th>
+            <th class="col-md-1">Проверить</th>
+        </tr>
+        {% for data in problem.test_data %}
+            <tr class="test-row">
+                <td class="in"><pre>{{ data.in }}</pre></td>
+                <td class="out"><pre>{{ data.out }}</pre></td>
+                <td class="test-button"><i class="mdi-action-bug-report debug_me"></i></td>
+                <td class="test-button"><i class="mdi-av-play-arrow run_me"></i></td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
