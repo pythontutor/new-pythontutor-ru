@@ -5,3 +5,5 @@ bootstrap-admin==0.3.5
 django-yamlfield==1.0.1
 markdown==2.6.1
 git+https://github.com/ryneeverett/python-markdown-comments.git@bd7a90fd8eed6fa49ca12b12b5b35580b0058dd3
+django-debug-toolbar==1.3.0
+django-markdown-deux==1.0.5
