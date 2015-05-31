@@ -23,7 +23,19 @@
         .nav-sidebar-problems {
             padding-left: 40px !important;
         }
+
+        ul.nav-sidebar-problems {
+            display: none;
+        }
     </style>
+
+    <script>
+        $(document).ready(function() {
+            $('a.nav-sidebar-problems').click(function() {
+                $(this).parent().children('ul.nav-sidebar-problems').toggle(300);
+            });
+        });
+    </script>
 {% endblock %}
 
 {% block sidebar %}
@@ -32,7 +44,13 @@
             <li>
                 <a href="{% url 'lesson' lesson.course.slug other_lesson.slug %}">{{ other_lesson.order }}. {{ other_lesson.name }}</a>
                 {% if lesson == other_lesson and lesson.problems.all %}
-                    <a href="#problems" class="nav-sidebar-problems">Задачи</a>
+                    <a href="javascript:void(0)" class="nav-sidebar-problems">Задачи</a>
+                    <ul class="nav nav-sidebar-problems">
+                        {% for problem in lesson.problems.all %}
+                            <!-- TODO show active -->
+                            <li><a href="{% url 'problem' lesson.course.slug lesson.slug problem.slug %}">{{ problem.name }}</a></li>
+                        {% endfor %}
+                    </ul>
                 {% endif %}
             </li>
         {% endfor %}
@@ -44,21 +62,4 @@
     <h1>{{ lesson.name }}</h1>
 
     {{ lesson.contents|markdownify_toc|safe }}
-
-    {% with lesson.problems.all as lesson_problems %}
-        {% if lesson_problems %}
-            <br />
-            <a name="problems"></a>
-            <table class="table table-striped table-hover">
-                <tr>
-                    <th><h3 style="margin: 0px;">Задачи</h3></th>
-                </tr>
-                {% for problem in lesson_problems %}
-                    <tr>
-                        <td><a href="{% url 'problem' lesson.course.slug lesson.slug problem.slug %}">{{ problem.name }}</a></td>
-                    </tr>
-                {% endfor %}
-            </table>
-        {% endif %}
-    {% endwith %}
 {% endblock %}

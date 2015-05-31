@@ -36,6 +36,22 @@
         .tests_passed_badge {
             display: none;
         }
+
+        .dropdown-menu > li {
+            display: inline-flex !important;
+        }
+
+        .dropdown-menu > li > a {
+            padding: 3px 10px;
+        }
+
+        .dropdown-menu .delete-submission {
+            float: right;
+        }
+
+        ul.nav-sidebar-problems {
+            display: none;
+        }
     </style>
 {% endblock %}
 
@@ -45,7 +61,13 @@
             <li>
                 <a href="{% url 'lesson' problem.lesson.course.slug other_lesson.slug %}">{{ other_lesson.order }}. {{ other_lesson.name }}</a>
                 {% if problem.lesson == other_lesson and problem.lesson.problems.all %}
-                    <a href="#problems" class="nav-sidebar-problems">Задачи</a>
+                    <a href="javascript:void(0)" class="nav-sidebar-problems">Задачи</a>
+                    <ul class="nav nav-sidebar-problems">
+                        {% for other_problem in problem.lesson.problems.all %}
+                            <!-- TODO show active -->
+                            <li><a href="{% url 'problem' other_problem.lesson.course.slug other_problem.lesson.slug other_problem.slug %}">{{ other_problem.name }}</a></li>
+                        {% endfor %}
+                    </ul>
                 {% endif %}
             </li>
         {% endfor %}
@@ -61,19 +83,33 @@
 
     <a class="btn btn-info btn-raised run_tests">Запустить все тесты <span class="badge tests_passed_badge">тестов пройдено: <span class="tests_passed">0</span>/{{ problem.test_data|length }}</span></a>
     <!-- TODO чекбокс "остановиться после первого упавшего теста" -->
-    <a class="btn btn-info btn-raised submit_solution">Отправить решение</a>
 
     <div class="btn-group">
-        <div class="btn-group">
-            <a href="bootstrap-elements.html" data-target="#" class="btn btn-default dropdown-toggle {% if not submissions %}disabled{% else %}btn-info{% endif %} submission_history_button" data-toggle="dropdown">
-                Отправленные решения <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu submission_history">
-                {% for submission in submissions %}
-                    <li><a href="javascript:void(0)" data-submission-id="{{ submission.id }}">{{ submission.date_string }}</a></li>
-                {% endfor %}
-            </ul>
-        </div>
+        <a class="btn btn-info btn-raised submit_solution">Сохранить решение</a>
+        <a href="javascript:void(0)" data-target="#" class="btn btn-info btn-raised dropdown-toggle" data-toggle="dropdown">
+            <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+            <!-- TODO сохранять с произвольным именем -->
+            <li><a href="javascript:void(0)">Сохранить с названием</a></li>
+        </ul>
+    </div>
+    <!-- TODO делать кнопку активной только после того, как решение изменилось\появилось(пустые не сохранять) -->
+    <!-- TODO делать кнопку активной только для зарегистрированных пользователей -->
+
+    <div class="btn-group">
+        <a href="bootstrap-elements.html" data-target="#" class="btn btn-default dropdown-toggle {% if not submissions %}disabled{% else %}btn-info{% endif %} submission_history_button" data-toggle="dropdown">
+            Мои решения <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu submission_history">
+            {% for submission in submissions %}
+                <li>
+                    <!-- TODO fix X position -->
+                    <a class="load-submission" href="javascript:void(0)" data-submission-id="{{ submission.id }}">{{ submission.date_string }}</a>
+                    <a class="delete-submission" href="javascript:void(0)" data-submission-id="{{ submission.id }}"><i class="mdi-content-clear"></i></a>
+                </li>
+            {% endfor %}
+        </ul>
     </div>
 
     <h2>Тестовые данные</h2>

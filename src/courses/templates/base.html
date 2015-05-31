@@ -145,14 +145,14 @@
                 </div>
                 <div class="navbar-collapse collapse navbar-responsive-collapse">
                     <ul class="nav navbar-nav">
-                        <li class="active"><a href="javascript:void(0)">Главная</a></li>
+                        <li class="active"><a href="{% url 'index' %}">Главная</a></li>
                         <li><a href="javascript:void(0)">Все курсы</a></li>
                         <li><a href="javascript:void(0)">Статистика</a></li>
                         <li><a href="javascript:void(0)">Отзывы</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right" style="margin-right: 15px;">
                         <li><p class="navbar-btn" style="margin: 0px;">
-                            {% if request.user %}
+                            {% if request.user.is_authenticated %}
                                 <a class="btn btn-raised btn-ripple btn-material-light-blue-500" href="javascript:void(0)">
                                     Выход
                                 </a>

@@ -125,7 +125,13 @@ $(function() {
 		});
 
 		req.done(function(response) {
-			$('.submission_history').prepend('<li><a href="javascript:void(0)" data-submission-id="' + response.id + '">' + response.date + '</a></li>')
+			$('.submission_history').prepend(
+				// TODO get rid of copypaste from template
+				'<li>' +
+                '<a class="load-submission" href="javascript:void(0)" data-submission-id="' + response.id + '">' + response.date + '</a>' +
+                '<a class="delete-submission" href="javascript:void(0)" data-submission-id="' + response.id + '"><i class="mdi-content-clear"></i></a>' +
+				'</li>'
+			)
 			$('.submission_history_button').removeClass('disabled').addClass('btn-info');
 
 			$.snackbar({
@@ -134,7 +140,7 @@ $(function() {
 		});
 	});
 
-	$('.dropdown-menu').on('click', 'a', function() {
+	$('.dropdown-menu').on('click', 'a.load-submission', function() {
 		var req = $.get('submissions/' + $(this).data('submission-id') + '/');
 
 		req.done(function(response) {
@@ -146,4 +152,30 @@ $(function() {
 		});
 	});
 
+	$('.dropdown-menu').on('click', 'a.delete-submission', function() {
+		var req = $.ajax({
+			url: 'submissions/' + $(this).data('submission-id') + '/',
+			type: 'DELETE',
+		});
+		var dropdown_item = $(this).parent();
+		var dropdown_menu = dropdown_item.parent();
+
+		req.done(function(response) {
+			dropdown_item.remove();
+
+			$.snackbar({
+				content: 'Решение от ' + response.date + ' удалено'
+			})
+
+			if(dropdown_menu.children().length === 0) {
+				$('.submission_history_button').removeClass('btn-info').addClass('disabled');
+			}
+		});
+	});
+
+	$('a.nav-sidebar-problems').click(function() {
+		$(this).parent().children('ul.nav-sidebar-problems').toggle(300);
+	});
+
+	$('a.load-submission').first().click();  // load most recent submission
 });
