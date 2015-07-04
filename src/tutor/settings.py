@@ -98,6 +98,6 @@ BOOTSTRAP_ADMIN_SIDEBAR_MENU = True
 
 class AllIps(object):
     def __contains__(self, item):
-        return item.startswith('10.0.0')
+        return (item == '127.0.0.1') or item.startswith('10.0.0')
 
 INTERNAL_IPS = AllIps()
