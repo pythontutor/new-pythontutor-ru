@@ -49,8 +49,13 @@
             float: right;
         }
 
-        ul.nav-sidebar-problems {
-            display: none;
+        ul.nav-sidebar-problems li.active {
+            background-color: #eeeeee;
+        }
+    
+        div.togglebutton {
+            display: inline-block;
+            margin-left: 10px;
         }
     </style>
 {% endblock %}
@@ -64,8 +69,9 @@
                     <a href="javascript:void(0)" class="nav-sidebar-problems">Задачи</a>
                     <ul class="nav nav-sidebar-problems">
                         {% for other_problem in problem.lesson.problems.all %}
-                            <!-- TODO show active -->
-                            <li><a href="{% url 'problem' other_problem.lesson.course.slug other_problem.lesson.slug other_problem.slug %}">{{ other_problem.name }}</a></li>
+                            <li{% if problem == other_problem %} class="active"{% endif %}>
+                                <a href="{% url 'problem' other_problem.lesson.course.slug other_problem.lesson.slug other_problem.slug %}">{{ other_problem.name }}</a>
+                            </li>
                         {% endfor %}
                     </ul>
                 {% endif %}
@@ -82,7 +88,13 @@
     <div id="visualizer"></div>
 
     <a class="btn btn-info btn-raised run_tests">Запустить все тесты <span class="badge tests_passed_badge">тестов пройдено: <span class="tests_passed">0</span>/{{ problem.test_data|length }}</span></a>
-    <!-- TODO чекбокс "остановиться после первого упавшего теста" -->
+    <div class="togglebutton">
+        <label>
+            <input type="checkbox" disabled> Остановиться на первой ошибке <!-- TODO javascript for this -->
+        </label>
+    </div>
+
+    <br />
 
     <div class="btn-group">
         <a class="btn btn-info btn-raised submit_solution">Сохранить решение</a>
@@ -98,7 +110,7 @@
     <!-- TODO делать кнопку активной только для зарегистрированных пользователей -->
 
     <div class="btn-group">
-        <a href="bootstrap-elements.html" data-target="#" class="btn btn-default dropdown-toggle {% if not submissions %}disabled{% else %}btn-info{% endif %} submission_history_button" data-toggle="dropdown">
+        <a href="javascript:void(0)" data-target="#" class="btn btn-default dropdown-toggle {% if not submissions %}disabled{% else %}btn-info{% endif %} submission_history_button" data-toggle="dropdown">
             Мои решения <span class="caret"></span>
         </a>
         <ul class="dropdown-menu submission_history">

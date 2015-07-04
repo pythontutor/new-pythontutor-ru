@@ -59,7 +59,6 @@ $(function() {
 
 	function run_test(row) {
 		var button = row.find('td i.run_me');
-		console.debug(row)
 
 		row.removeClass('danger success');
 		button.removeClass('mdi-av-play-arrow').addClass('mdi-action-autorenew');
@@ -67,7 +66,7 @@ $(function() {
 		var req = $.post('//evaler.pythontutor.ru/eval', {
 			user_script: visualizer.code,
 			input_data : row.find('td.in').text(),
-			explain    : false,
+			explain    : false
 		});
 
 		req.done(function(response) {
@@ -82,7 +81,7 @@ $(function() {
 				default:
 					row.addClass('danger');
 					break;
-			};
+			}
 
 			button.removeClass('mdi-action-autorenew').addClass('mdi-av-play-arrow');
 
@@ -131,7 +130,7 @@ $(function() {
                 '<a class="load-submission" href="javascript:void(0)" data-submission-id="' + response.id + '">' + response.date + '</a>' +
                 '<a class="delete-submission" href="javascript:void(0)" data-submission-id="' + response.id + '"><i class="mdi-content-clear"></i></a>' +
 				'</li>'
-			)
+			);
 			$('.submission_history_button').removeClass('disabled').addClass('btn-info');
 
 			$.snackbar({
@@ -155,7 +154,7 @@ $(function() {
 	$('.dropdown-menu').on('click', 'a.delete-submission', function() {
 		var req = $.ajax({
 			url: 'submissions/' + $(this).data('submission-id') + '/',
-			type: 'DELETE',
+			type: 'DELETE'
 		});
 		var dropdown_item = $(this).parent();
 		var dropdown_menu = dropdown_item.parent();
@@ -165,7 +164,7 @@ $(function() {
 
 			$.snackbar({
 				content: 'Решение от ' + response.date + ' удалено'
-			})
+			});
 
 			if(dropdown_menu.children().length === 0) {
 				$('.submission_history_button').removeClass('btn-info').addClass('disabled');
